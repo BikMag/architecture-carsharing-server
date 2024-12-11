@@ -21,6 +21,16 @@ public class RentalService {
         this.rentalRepository = rentalRepository;
     }
 
+    public Rental getRentalById(Long id) {
+        Optional<Rental> rentalOptional = rentalRepository.findById(id);
+
+        if (rentalOptional.isEmpty()) {
+            throw new RuntimeException("Rental not found");
+        }
+
+        return rentalOptional.get();
+    }
+
     public Rental rentCar(Long carId, String username) {
         Optional<Car> carOptional = carRepository.findById(carId);
 

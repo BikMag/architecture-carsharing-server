@@ -29,4 +29,9 @@ public class AuthController {
         userRepository.save(user);
         return "User registered successfully!";
     }
+
+    @GetMapping("/check")
+    public String checkUser() {
+        return "User logged in successfully!";
+    }
 }

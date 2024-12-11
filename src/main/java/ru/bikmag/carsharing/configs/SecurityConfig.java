@@ -2,6 +2,7 @@ package ru.bikmag.carsharing.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,15 +29,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/cars").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Доступ к регистрациям/логинам
                         .anyRequest().authenticated() // Остальные требуют авторизации
                 )
-                .httpBasic(); // Используем базовую аутентификацию
+                .httpBasic(Customizer.withDefaults()); // Используем базовую аутентификацию
         return http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

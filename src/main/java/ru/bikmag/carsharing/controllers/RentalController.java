@@ -15,6 +15,11 @@ public class RentalController {
         this.rentalService = rentalService;
     }
 
+    @GetMapping("/{rentId}")
+    public Rental getRental(@PathVariable Long rentId) {
+        return rentalService.getRentalById(rentId);
+    }
+
     @PostMapping("/rent/{carId}")
     public Rental rentCar(@PathVariable Long carId, Authentication authentication) {
         String username = authentication.getName(); // Получаем имя текущего пользователя
