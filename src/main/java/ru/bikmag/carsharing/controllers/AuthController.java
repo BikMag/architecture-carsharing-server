@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.bikmag.carsharing.models.User;
 import ru.bikmag.carsharing.repositories.UserRepository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -31,7 +32,8 @@ public class AuthController {
     }
 
     @GetMapping("/check")
-    public String checkUser() {
-        return "User logged in successfully!";
+    public User checkUser(@RequestParam String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.orElseThrow();
     }
 }

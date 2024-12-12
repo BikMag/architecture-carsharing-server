@@ -18,11 +18,6 @@ public class CarController {
         this.carService = carService;
     }
 
-//    @GetMapping
-//    public List<Car> getAllCars() {
-//        return carService.getAllCars();
-//    }
-
     @GetMapping
     public List<Car> getAvailableCars(
             @RequestParam(required = false) String status,
@@ -42,13 +37,13 @@ public class CarController {
         return carService.addCar(car);
     }
 
-    @PatchMapping("/{carId}/status")
+    @PutMapping("/{carId}/status")
 //    @PreAuthorize("hasRole('MECHANIC')")
     public Car updateCarStatus(@PathVariable Long carId, @RequestParam Car.CarStatus status) {
         return carService.updateCarStatus(carId, status);
     }
 
-    @PatchMapping("/{carId}/repair")
+    @PutMapping("/{carId}/repair")
     @PreAuthorize("hasRole('MECHANIC')")
     public ResponseEntity<String> updateRepairStatus(
             @PathVariable Long carId,

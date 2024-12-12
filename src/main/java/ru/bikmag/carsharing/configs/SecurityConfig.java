@@ -29,14 +29,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-//                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/cars").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Доступ к регистрациям/логинам
                         .anyRequest().authenticated() // Остальные требуют авторизации
                 )
-                .httpBasic(Customizer.withDefaults()); // Используем базовую аутентификацию
+                .httpBasic(Customizer.withDefaults()); // Базовая аутентификация
         return http.build();
     }
     @Bean

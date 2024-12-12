@@ -20,6 +20,12 @@ public class RentalController {
         return rentalService.getRentalById(rentId);
     }
 
+    @GetMapping("/current")
+    public Rental getCurrentRental(Authentication authentication) {
+        String username = authentication.getName();
+        return rentalService.getCurrentRentalByUsername(username);
+    }
+
     @PostMapping("/rent/{carId}")
     public Rental rentCar(@PathVariable Long carId, Authentication authentication) {
         String username = authentication.getName(); // Получаем имя текущего пользователя

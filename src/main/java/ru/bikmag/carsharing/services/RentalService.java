@@ -6,6 +6,7 @@ import ru.bikmag.carsharing.models.Rental;
 import ru.bikmag.carsharing.repositories.CarRepository;
 import ru.bikmag.carsharing.repositories.RentalRepository;
 
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -29,6 +30,25 @@ public class RentalService {
         }
 
         return rentalOptional.get();
+    }
+
+    public Rental getCurrentRentalByUsername(String username) {
+        Optional<Rental> rentalOptional = rentalRepository
+                .findByUsername(username)
+                .stream()
+                .filter(rental -> rental.getEndTime() == null)
+                .findFirst();
+
+        if (rentalOptional.isEmpty()) {
+            return null;
+        }
+
+        Rental currentRental = rentalOptional.get();
+        if (currentRental.getEndTime() != null) {
+            return null;
+        }
+
+        return currentRental;
     }
 
     public Rental rentCar(Long carId, String username) {
@@ -67,16 +87,18 @@ public class RentalService {
             throw new RuntimeException("Rental is already finished");
         }
 
+        DecimalFormat df = new DecimalFormat("#.##");
         rental.setEndTime(LocalDateTime.now());
         rentalRepository.save(rental);
-
         rental.setPrice(
-                rental.getCar().getPricePerMinute() * (
-                        Duration.between(
-                                rental.getStartTime(),
-                                rental.getEndTime()
-                        ).toMinutes()
-                )
+                Double.parseDouble(df.format(
+                    rental.getCar().getPricePerMinute() * (
+                                Duration.between(
+                                        rental.getStartTime(),
+                                        rental.getEndTime()
+                                ).toMinutes() + 1L
+                    )
+                ))
         );
         rentalRepository.save(rental);
 
